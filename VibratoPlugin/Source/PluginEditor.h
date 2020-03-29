@@ -16,11 +16,11 @@
 //==============================================================================
 /**
 */
-class NewProjectAudioProcessorEditor  : public AudioProcessorEditor
+class VibratoPluginAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    NewProjectAudioProcessorEditor (NewProjectAudioProcessor&);
-    ~NewProjectAudioProcessorEditor();
+    VibratoPluginAudioProcessorEditor (VibratoPluginAudioProcessor&);
+    ~VibratoPluginAudioProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -29,7 +29,7 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    NewProjectAudioProcessor& processor;
+    VibratoPluginAudioProcessor& processor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessorEditor)
 };
