@@ -11,8 +11,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-
-
 //==============================================================================
 VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
 #ifndef JucePlugin_PreferredChannelConfigurations
