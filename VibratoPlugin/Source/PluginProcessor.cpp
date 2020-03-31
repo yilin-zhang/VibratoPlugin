@@ -11,19 +11,24 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
+
 //==============================================================================
-VibratoPluginAudioProcessor::VibratoPluginAudioProcessor()
+VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                    ),
 #endif
+    m_fMaxModulationWidthInSec(0),
+    m_pVibrato(nullptr)
 {
+    CVibrato::createInstance(m_pVibrato);
 }
 
 VibratoPluginAudioProcessor::~VibratoPluginAudioProcessor()
@@ -95,8 +100,7 @@ void VibratoPluginAudioProcessor::changeProgramName (int index, const String& ne
 //==============================================================================
 void VibratoPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    m_pVibrato->initInstance(m_fMaxModulationWidthInSec, static_cast<float>(sampleRate), getTotalNumInputChannels());
 }
 
 void VibratoPluginAudioProcessor::releaseResources()
@@ -150,12 +154,14 @@ void VibratoPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    {
+//        auto* channelData = buffer.getWritePointer (channel);
+//
+//        // ..do something to the data...
+//    }
 
-        // ..do something to the data...
-    }
+    m_pVibrato->process(buffer.getArrayOfWritePointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
 }
 
 //==============================================================================
