@@ -23,7 +23,7 @@ VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
                      #endif
                     ),
 #endif
-    m_fMaxModulationWidthInSec(0),
+    m_fMaxModulationWidthInSec(0.1),  // TODO: This needs to be set properly
     m_pVibrato(nullptr)
 {
     CVibrato::createInstance(m_pVibrato);
@@ -98,7 +98,12 @@ void VibratoPluginAudioProcessor::changeProgramName (int index, const String& ne
 //==============================================================================
 void VibratoPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    std::cout << totalNumInputChannels << "  " << totalNumOutputChannels << std::endl;
     m_pVibrato->initInstance(m_fMaxModulationWidthInSec, static_cast<float>(sampleRate), getTotalNumInputChannels());
+    m_pVibrato->setParam(CVibrato::kParamModFreqInHz, 4);
+    m_pVibrato->setParam(CVibrato::kParamModWidthInS, 0.005);
 }
 
 void VibratoPluginAudioProcessor::releaseResources()
@@ -143,6 +148,7 @@ void VibratoPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
@@ -159,7 +165,7 @@ void VibratoPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
 //        // ..do something to the data...
 //    }
 
-    m_pVibrato->process(buffer.getArrayOfWritePointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
+    m_pVibrato->process(const_cast<float **>(buffer.getArrayOfReadPointers()), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
 }
 
 //==============================================================================

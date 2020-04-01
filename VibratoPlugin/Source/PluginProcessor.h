@@ -58,11 +58,12 @@ public:
 
     //==============================================================================
     float m_fMaxModulationWidthInSec;
+    CVibrato * m_pVibrato;
 
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessor)
 
-    CVibrato * m_pVibrato;
+
 
 };

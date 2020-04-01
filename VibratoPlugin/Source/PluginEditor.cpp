@@ -69,6 +69,8 @@ void VibratoPluginAudioProcessorEditor::resized()
 
 void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
+    //TODO: Handle which slider is turned
+    processor.m_pVibrato->setParam(CVibrato::kParamModWidthInS, slider->getValue()/1000);
 }
 
 void VibratoPluginAudioProcessorEditor::buttonStateChanged(Button *button)
