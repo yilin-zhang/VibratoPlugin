@@ -103,8 +103,8 @@ void VibratoPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     std::cout << totalNumInputChannels << "  " << totalNumOutputChannels << std::endl;
     m_pVibrato->initInstance(m_fMaxModulationWidthInSec, static_cast<float>(sampleRate), getTotalNumInputChannels());
-    m_pVibrato->setParam(CVibrato::kParamModFreqInHz, 4);
-    m_pVibrato->setParam(CVibrato::kParamModWidthInS, 0.005);
+    m_pVibrato->setParam(CVibrato::kParamModFreqInHz, 20.0);
+    m_pVibrato->setParam(CVibrato::kParamModWidthInS, 2.0);
 }
 
 void VibratoPluginAudioProcessor::releaseResources()

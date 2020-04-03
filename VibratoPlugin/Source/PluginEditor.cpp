@@ -26,13 +26,13 @@ VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPlu
     addAndMakeVisible (btnBypass);
 
     // TODO: The following range settings should be changed
-    slVibratoWidth.setRange(0.0, 127.0, 1.0);
+    slVibratoWidth.setRange(0.0, 2000, 0.01);
     slVibratoWidth.setValue(0);
     slVibratoWidth.setTextValueSuffix (" ms");
     lbVibratoWidth.setText("Mod Width", dontSendNotification);
     lbVibratoWidth.attachToComponent(&slVibratoWidth, false);
 
-    slVibratoFreq.setRange(0.0, 127.0, 1.0);
+    slVibratoFreq.setRange(0.0, 20, 0.01);
     slVibratoFreq.setValue(0);
     slVibratoFreq.setTextValueSuffix (" Hz");
     lbVibratoFreq.setText("Frequency", dontSendNotification);
@@ -71,7 +71,7 @@ void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
     if (!processor.isBypassed()) {
         if (slider == &slVibratoWidth)
-            processor.setDepth(static_cast<float>(slider->getValue()));
+            processor.setDepth(static_cast<float>(slider->getValue()/1000));
         else if (slider == &slVibratoFreq)
             processor.setModulationFrequency(static_cast<float>(slider->getValue()));
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="takfsx" name="VibratoPlugin" projectType="audioplug" jucerVersion="5.4.4"
+<JUCERPROJECT id="takfsx" name="VibratoPlugin" projectType="audioplug" jucerVersion="5.4.7"
               pluginManufacturer="MUSI6106">
   <MAINGROUP id="UQtzwo" name="VibratoPlugin">
     <GROUP id="{75E6AA04-013A-6C44-A3B8-8CBBA6FB7B04}" name="Source">
