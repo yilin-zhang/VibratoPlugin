@@ -58,8 +58,8 @@ public:
 
     //==============================================================================
 
-    void toggleBypass();
     bool isBypassed();
+    void toggleBypass();
     void setDepth(float depthInMilliSec);
     void setModulationFrequency(float freqInHz);
 
@@ -68,9 +68,9 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessor)
 
-
-    CVibrato * m_pVibrato;
-    bool bypass;
+    CVibrato * vibrato;
+    bool bypassed;
+    float cachedDepthInS;
+    float cachedModFreqInHz;
     float m_fMaxModulationWidthInSec;
-
 };

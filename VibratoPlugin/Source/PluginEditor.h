@@ -28,6 +28,9 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
+    float getDepthSliderValueInS();
+    float getModFreqSliderValueInHz();
+
 private:
     void sliderValueChanged (Slider* slider) override;
     void buttonStateChanged (Button* button) override;
@@ -37,8 +40,8 @@ private:
     // access the processor object that created it.
     VibratoPluginAudioProcessor& processor;
 
-    Slider slVibratoWidth {Slider::RotaryVerticalDrag, Slider::TextBoxBelow};
-    Label lbVibratoWidth;
+    Slider slVibratoDepth {Slider::RotaryVerticalDrag, Slider::TextBoxBelow};
+    Label lbVibratoDepth;
     Slider slVibratoFreq {Slider::RotaryVerticalDrag, Slider::TextBoxBelow};
     Label lbVibratoFreq;
     ToggleButton btnBypass {"Bypass"};
