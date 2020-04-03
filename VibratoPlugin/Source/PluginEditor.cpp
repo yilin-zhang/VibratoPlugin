@@ -42,8 +42,8 @@ VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPlu
     slVibratoFreq.addListener(this);
     btnBypass.addListener(this);
 
-    processor.setDepth(getWidthSliderValue());
-    processor.setModulationFrequency(getModFreqSliderValue());
+    processor.setDepth(getWidthSliderValueInS());
+    processor.setModulationFrequency(getModFreqSliderValueInHz());
 }
 
 VibratoPluginAudioProcessorEditor::~VibratoPluginAudioProcessorEditor()
@@ -72,32 +72,25 @@ void VibratoPluginAudioProcessorEditor::resized()
 
 void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
-    if (!processor.isBypassed()) {
-        if (slider == &slVibratoWidth)
-            processor.setDepth(getWidthSliderValue());
-        else if (slider == &slVibratoFreq)
-            processor.setModulationFrequency(getModFreqSliderValue());
-    }
+    if (slider == &slVibratoWidth)
+        processor.setDepth(getWidthSliderValueInS());
+    else if (slider == &slVibratoFreq)
+        processor.setModulationFrequency(getModFreqSliderValueInHz());
 }
 
 void VibratoPluginAudioProcessorEditor::buttonStateChanged(Button *button)
 {
-    std::cout << "state changed" << std::endl;
-   // std::cout << button->getToggleState() << std::endl;
-
 }
 
 void VibratoPluginAudioProcessorEditor::buttonClicked(Button *button)
 {
-    std::cout << "Bypass clicked" << std::endl;
     processor.toggleBypass();
-//    processor.bypassPlugin();
 }
 
-float VibratoPluginAudioProcessorEditor::getWidthSliderValue() {
-    return static_cast<float>(slVibratoWidth.getValue());
+float VibratoPluginAudioProcessorEditor::getWidthSliderValueInS() {
+    return static_cast<float>(slVibratoWidth.getValue()/1000);
 }
 
-float VibratoPluginAudioProcessorEditor::getModFreqSliderValue() {
+float VibratoPluginAudioProcessorEditor::getModFreqSliderValueInHz() {
     return static_cast<float>(slVibratoFreq.getValue());
 }

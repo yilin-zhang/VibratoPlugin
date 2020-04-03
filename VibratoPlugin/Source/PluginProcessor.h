@@ -70,7 +70,7 @@ private:
 
     CVibrato * vibrato;
     bool bypassed;
-    float cachedDepth;
-    float cachedModFreq;
+    float cachedDepthInS;
+    float cachedModFreqInHz;
     float m_fMaxModulationWidthInSec;
 };
