@@ -69,6 +69,12 @@ void VibratoPluginAudioProcessorEditor::resized()
 
 void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
+    if (!processor.isBypassed()) {
+        if (slider == &slVibratoWidth)
+            processor.setDepth(static_cast<float>(slider->getValue()));
+        else if (slider == &slVibratoFreq)
+            processor.setModulationFrequency(static_cast<float>(slider->getValue()));
+    }
 }
 
 void VibratoPluginAudioProcessorEditor::buttonStateChanged(Button *button)
@@ -80,4 +86,6 @@ void VibratoPluginAudioProcessorEditor::buttonStateChanged(Button *button)
 void VibratoPluginAudioProcessorEditor::buttonClicked(Button *button)
 {
     std::cout << "button clicked" << std::endl;
+    processor.toggleBypass();
+
 }

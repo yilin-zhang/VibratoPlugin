@@ -12,18 +12,22 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-VibratoPluginAudioProcessor::VibratoPluginAudioProcessor()
+VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                    ),
 #endif
+     m_pVibrato(nullptr),
+     bypass(false),
+     m_fMaxModulationWidthInSec(0.1)  // TODO: This needs to be set properly
 {
+    CVibrato::createInstance(m_pVibrato);
 }
 
 VibratoPluginAudioProcessor::~VibratoPluginAudioProcessor()
@@ -95,8 +99,12 @@ void VibratoPluginAudioProcessor::changeProgramName (int index, const String& ne
 //==============================================================================
 void VibratoPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    std::cout << totalNumInputChannels << "  " << totalNumOutputChannels << std::endl;
+    m_pVibrato->initInstance(m_fMaxModulationWidthInSec, static_cast<float>(sampleRate), getTotalNumInputChannels());
+    m_pVibrato->setParam(CVibrato::kParamModFreqInHz, 4);
+    m_pVibrato->setParam(CVibrato::kParamModWidthInS, 0.005);
 }
 
 void VibratoPluginAudioProcessor::releaseResources()
@@ -141,8 +149,9 @@ void VibratoPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
-    //for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-    //    buffer.clear (i, 0, buffer.getNumSamples());
+
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear (i, 0, buffer.getNumSamples());
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -150,12 +159,14 @@ void VibratoPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    {
+//        auto* channelData = buffer.getWritePointer (channel);
+//
+//        // ..do something to the data...
+//    }
 
-        // ..do something to the data...
-    }
+    m_pVibrato->process(const_cast<float **>(buffer.getArrayOfReadPointers()), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -188,4 +199,23 @@ void VibratoPluginAudioProcessor::setStateInformation (const void* data, int siz
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new VibratoPluginAudioProcessor();
+}
+
+
+void VibratoPluginAudioProcessor::toggleBypass() {
+    //TODO: smoothly reduce width
+    m_pVibrato->setParam(CVibrato::kParamModWidthInS, 0.0f);
+    bypass = !bypass;
+}
+
+bool VibratoPluginAudioProcessor::isBypassed() {
+    return bypass;
+}
+
+void VibratoPluginAudioProcessor::setDepth(float depthInMilliSec) {
+    m_pVibrato->setParam(CVibrato::kParamModWidthInS, depthInMilliSec / 1000);
+}
+
+void VibratoPluginAudioProcessor::setModulationFrequency(float freqInHz) {
+    m_pVibrato->setParam(CVibrato::kParamModFreqInHz, freqInHz);
 }
