@@ -26,13 +26,13 @@ VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPlu
     addAndMakeVisible (btnBypass);
 
     // TODO: The following range settings should be changed
-    slVibratoWidth.setRange(0.0, 127.0, 1.0);
+    slVibratoWidth.setRange(0.0, 100.0, 0.1);
     slVibratoWidth.setValue(0);
     slVibratoWidth.setTextValueSuffix (" ms");
     lbVibratoWidth.setText("Mod Width", dontSendNotification);
     lbVibratoWidth.attachToComponent(&slVibratoWidth, false);
 
-    slVibratoFreq.setRange(0.0, 127.0, 1.0);
+    slVibratoFreq.setRange(0.0, 5.0, 0.001);
     slVibratoFreq.setValue(0);
     slVibratoFreq.setTextValueSuffix (" Hz");
     lbVibratoFreq.setText("Frequency", dontSendNotification);
@@ -41,6 +41,9 @@ VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPlu
     slVibratoWidth.addListener(this);
     slVibratoFreq.addListener(this);
     btnBypass.addListener(this);
+
+    processor.setDepth(getWidthSliderValue());
+    processor.setModulationFrequency(getModFreqSliderValue());
 }
 
 VibratoPluginAudioProcessorEditor::~VibratoPluginAudioProcessorEditor()
@@ -71,21 +74,30 @@ void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
     if (!processor.isBypassed()) {
         if (slider == &slVibratoWidth)
-            processor.setDepth(static_cast<float>(slider->getValue()));
+            processor.setDepth(getWidthSliderValue());
         else if (slider == &slVibratoFreq)
-            processor.setModulationFrequency(static_cast<float>(slider->getValue()));
+            processor.setModulationFrequency(getModFreqSliderValue());
     }
 }
 
 void VibratoPluginAudioProcessorEditor::buttonStateChanged(Button *button)
 {
     std::cout << "state changed" << std::endl;
-    std::cout << button->getToggleState() << std::endl;
+   // std::cout << button->getToggleState() << std::endl;
+
 }
 
 void VibratoPluginAudioProcessorEditor::buttonClicked(Button *button)
 {
-    std::cout << "button clicked" << std::endl;
+    std::cout << "Bypass clicked" << std::endl;
     processor.toggleBypass();
+//    processor.bypassPlugin();
+}
 
+float VibratoPluginAudioProcessorEditor::getWidthSliderValue() {
+    return static_cast<float>(slVibratoWidth.getValue());
+}
+
+float VibratoPluginAudioProcessorEditor::getModFreqSliderValue() {
+    return static_cast<float>(slVibratoFreq.getValue());
 }

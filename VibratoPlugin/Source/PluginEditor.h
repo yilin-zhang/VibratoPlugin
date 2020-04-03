@@ -28,6 +28,9 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
+    float getWidthSliderValue();
+    float getModFreqSliderValue();
+
 private:
     void sliderValueChanged (Slider* slider) override;
     void buttonStateChanged (Button* button) override;
