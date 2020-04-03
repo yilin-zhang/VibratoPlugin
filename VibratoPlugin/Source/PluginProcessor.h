@@ -57,13 +57,20 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-    float m_fMaxModulationWidthInSec;
-    CVibrato * m_pVibrato;
+
+    void toggleBypass();
+    bool isBypassed();
+    void setDepth(float depthInMilliSec);
+    void setModulationFrequency(float freqInHz);
+
 
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessor)
 
 
+    CVibrato * m_pVibrato;
+    bool bypass;
+    float m_fMaxModulationWidthInSec;
 
 };

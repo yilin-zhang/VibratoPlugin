@@ -23,8 +23,9 @@ VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
                      #endif
                     ),
 #endif
-    m_fMaxModulationWidthInSec(0.1),  // TODO: This needs to be set properly
-    m_pVibrato(nullptr)
+     m_pVibrato(nullptr),
+     bypass(false),
+     m_fMaxModulationWidthInSec(0.1)  // TODO: This needs to be set properly
 {
     CVibrato::createInstance(m_pVibrato);
 }
@@ -198,4 +199,23 @@ void VibratoPluginAudioProcessor::setStateInformation (const void* data, int siz
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new VibratoPluginAudioProcessor();
+}
+
+
+void VibratoPluginAudioProcessor::toggleBypass() {
+    //TODO: smoothly reduce width
+    m_pVibrato->setParam(CVibrato::kParamModWidthInS, 0.0f);
+    bypass = !bypass;
+}
+
+bool VibratoPluginAudioProcessor::isBypassed() {
+    return bypass;
+}
+
+void VibratoPluginAudioProcessor::setDepth(float depthInMilliSec) {
+    m_pVibrato->setParam(CVibrato::kParamModWidthInS, depthInMilliSec / 1000);
+}
+
+void VibratoPluginAudioProcessor::setModulationFrequency(float freqInHz) {
+    m_pVibrato->setParam(CVibrato::kParamModFreqInHz, freqInHz);
 }
