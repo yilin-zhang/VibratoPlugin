@@ -34,6 +34,7 @@ VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
 
 VibratoPluginAudioProcessor::~VibratoPluginAudioProcessor()
 {
+    CVibrato::destroyInstance(vibrato);
 }
 
 //==============================================================================
