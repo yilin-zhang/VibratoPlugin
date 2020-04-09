@@ -60,8 +60,8 @@ public:
 
     bool isBypassed();
     void toggleBypass();
-    void setDepth(float depthInMilliSec);
-    void setModulationFrequency(float freqInHz);
+    void setModWidthInS(float widthInS);
+    void setModFreqInHz(float freqInHz);
 
 
 private:

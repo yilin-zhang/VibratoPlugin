@@ -28,8 +28,8 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
-    float getDepthSliderValueInS();
-    float getModFreqSliderValueInHz();
+    float getWidthSliderValueInS();
+    float getFreqSliderValueInHz();
 
 private:
     void sliderValueChanged (Slider* slider) override;

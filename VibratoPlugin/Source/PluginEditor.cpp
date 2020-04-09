@@ -44,8 +44,8 @@ VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPlu
     sliderModFreq.addListener(this);
     buttonBypass.addListener(this);
 
-    processor.setDepth(getDepthSliderValueInS());
-    processor.setModulationFrequency(getModFreqSliderValueInHz());
+    processor.setModWidthInS(getWidthSliderValueInS());
+    processor.setModFreqInHz(getFreqSliderValueInHz());
 }
 
 VibratoPluginAudioProcessorEditor::~VibratoPluginAudioProcessorEditor()
@@ -75,9 +75,9 @@ void VibratoPluginAudioProcessorEditor::resized()
 void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
     if (slider == &sliderModWidth)
-        processor.setDepth(getDepthSliderValueInS());
+        processor.setModWidthInS(getWidthSliderValueInS());
     else if (slider == &sliderModFreq)
-        processor.setModulationFrequency(getModFreqSliderValueInHz());
+        processor.setModFreqInHz(getFreqSliderValueInHz());
 }
 
 void VibratoPluginAudioProcessorEditor::buttonStateChanged(Button *button)
@@ -89,10 +89,10 @@ void VibratoPluginAudioProcessorEditor::buttonClicked(Button *button)
     processor.toggleBypass();
 }
 
-float VibratoPluginAudioProcessorEditor::getDepthSliderValueInS() {
+float VibratoPluginAudioProcessorEditor::getWidthSliderValueInS() {
     return static_cast<float>(sliderModWidth.getValue()/1000);
 }
 
-float VibratoPluginAudioProcessorEditor::getModFreqSliderValueInHz() {
+float VibratoPluginAudioProcessorEditor::getFreqSliderValueInHz() {
     return static_cast<float>(sliderModFreq.getValue());
 }

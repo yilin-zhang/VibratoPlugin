@@ -203,13 +203,13 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 void VibratoPluginAudioProcessor::toggleBypass() {
     if (m_bBypassed) {
         m_bBypassed = !m_bBypassed;
-        setDepth(m_fCachedWidthInS );
-        setModulationFrequency(m_fCachedFreqInHz);
+        setModWidthInS(m_fCachedWidthInS );
+        setModFreqInHz(m_fCachedFreqInHz);
     }
     else {
         m_fCachedWidthInS = vibrato->getParam(CVibrato::kParamModWidthInS);
         m_fCachedFreqInHz = vibrato->getParam(CVibrato::kParamModFreqInHz);
-        setModulationFrequency(0.0f);
+        setModFreqInHz(0.0f);
         m_bBypassed = !m_bBypassed;
     }
 
@@ -221,14 +221,14 @@ bool VibratoPluginAudioProcessor::isBypassed() {
     return m_bBypassed;
 }
 
-void VibratoPluginAudioProcessor::setDepth(float depthInSec) {
+void VibratoPluginAudioProcessor::setModWidthInS(float widthInS) {
     if (isBypassed())
-        m_fCachedWidthInS = depthInSec;
+        m_fCachedWidthInS = widthInS;
     else
-        vibrato->setParam(CVibrato::kParamModWidthInS, depthInSec);
+        vibrato->setParam(CVibrato::kParamModWidthInS, widthInS);
 }
 
-void VibratoPluginAudioProcessor::setModulationFrequency(float freqInHz) {
+void VibratoPluginAudioProcessor::setModFreqInHz(float freqInHz) {
     if (isBypassed())
         m_fCachedFreqInHz = freqInHz;
     else
