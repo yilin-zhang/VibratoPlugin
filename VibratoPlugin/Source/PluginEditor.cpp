@@ -19,30 +19,30 @@ VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPlu
     // editor's size to whatever you need it to be.
     setSize (400, 300);
 
-    addAndMakeVisible (slVibratoDepth);
-    addAndMakeVisible (lbVibratoDepth);
-    addAndMakeVisible (slVibratoFreq);
-    addAndMakeVisible (lbVibratoFreq);
-    addAndMakeVisible (btnBypass);
+    addAndMakeVisible (sliderModWidth);
+    //addAndMakeVisible (labelModWidth);
+    addAndMakeVisible (sliderModFreq);
+    //addAndMakeVisible (labelModFreq);
+    addAndMakeVisible (buttonBypass);
 
     // TODO: The following range settings should be changed
-    slVibratoDepth.setRange(0.0, 100.0, 0.1);
-    slVibratoDepth.setValue(0);
-    slVibratoDepth.setTextValueSuffix (" ms");
-    lbVibratoDepth.setText("Depth", dontSendNotification);
-    lbVibratoDepth.attachToComponent(&slVibratoDepth, false);
-    lbVibratoDepth.setJustificationType(Justification::centred);
+    sliderModWidth.setRange(0.0, 100.0, 0.1);
+    sliderModWidth.setValue(0);
+    sliderModWidth.setTextValueSuffix (" ms");
+    labelModWidth.setText("Mod Width", dontSendNotification);
+    labelModWidth.attachToComponent(&sliderModWidth, false);
+    labelModWidth.setJustificationType(Justification::centred);
 
-    slVibratoFreq.setRange(0.0, 5.0, 0.001);
-    slVibratoFreq.setValue(0);
-    slVibratoFreq.setTextValueSuffix (" Hz");
-    lbVibratoFreq.setText("Mod Frequency", dontSendNotification);
-    lbVibratoFreq.attachToComponent(&slVibratoFreq, false);
-    lbVibratoFreq.setJustificationType(Justification::centred);
+    sliderModFreq.setRange(0.0, 5.0, 0.001);
+    sliderModFreq.setValue(0);
+    sliderModFreq.setTextValueSuffix (" Hz");
+    labelModFreq.setText("Mod Frequency", dontSendNotification);
+    labelModFreq.attachToComponent(&sliderModFreq, false);
+    labelModFreq.setJustificationType(Justification::centred);
 
-    slVibratoDepth.addListener(this);
-    slVibratoFreq.addListener(this);
-    btnBypass.addListener(this);
+    sliderModWidth.addListener(this);
+    sliderModFreq.addListener(this);
+    buttonBypass.addListener(this);
 
     processor.setDepth(getDepthSliderValueInS());
     processor.setModulationFrequency(getModFreqSliderValueInHz());
@@ -67,16 +67,16 @@ void VibratoPluginAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    slVibratoDepth.setBounds(50, 80, 100, 100);
-    slVibratoFreq.setBounds(200, 80, 100, 100);
-    btnBypass.setBounds(10, 10, 100, 50);
+    sliderModWidth.setBounds(50, 80, 100, 100);
+    sliderModFreq.setBounds(200, 80, 100, 100);
+    buttonBypass.setBounds(10, 10, 100, 50);
 }
 
 void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
-    if (slider == &slVibratoDepth)
+    if (slider == &sliderModWidth)
         processor.setDepth(getDepthSliderValueInS());
-    else if (slider == &slVibratoFreq)
+    else if (slider == &sliderModFreq)
         processor.setModulationFrequency(getModFreqSliderValueInHz());
 }
 
@@ -90,9 +90,9 @@ void VibratoPluginAudioProcessorEditor::buttonClicked(Button *button)
 }
 
 float VibratoPluginAudioProcessorEditor::getDepthSliderValueInS() {
-    return static_cast<float>(slVibratoDepth.getValue()/1000);
+    return static_cast<float>(sliderModWidth.getValue()/1000);
 }
 
 float VibratoPluginAudioProcessorEditor::getModFreqSliderValueInHz() {
-    return static_cast<float>(slVibratoFreq.getValue());
+    return static_cast<float>(sliderModFreq.getValue());
 }

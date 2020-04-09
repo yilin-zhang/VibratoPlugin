@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="takfsx" name="VibratoPlugin" projectType="audioplug" jucerVersion="5.4.4"
+<JUCERPROJECT id="takfsx" name="VibratoPlugin" projectType="audioplug" jucerVersion="5.4.7"
               pluginManufacturer="MUSI6106">
   <MAINGROUP id="UQtzwo" name="VibratoPlugin">
     <GROUP id="{75E6AA04-013A-6C44-A3B8-8CBBA6FB7B04}" name="Source">
-      <FILE id="Hy4GCy" name="ErrorDef.h" compile="0" resource="0" file="Source/ErrorDef.h"/>
-      <FILE id="VKfJ1S" name="Lfo.h" compile="0" resource="0" file="Source/Lfo.h"/>
-      <FILE id="FFraJD" name="RingBuffer.h" compile="0" resource="0" file="Source/RingBuffer.h"/>
-      <FILE id="DcPFTG" name="Synthesis.h" compile="0" resource="0" file="Source/Synthesis.h"/>
-      <FILE id="Aur1fF" name="Util.h" compile="0" resource="0" file="Source/Util.h"/>
-      <FILE id="lM6HLV" name="Vibrato.cpp" compile="1" resource="0" file="Source/Vibrato.cpp"/>
-      <FILE id="C1oSZf" name="Vibrato.h" compile="0" resource="0" file="Source/Vibrato.h"/>
+      <GROUP id="{E1FD344A-5D17-A972-A92B-CD4AE75AEDF4}" name="Vibrato">
+        <FILE id="Hy4GCy" name="ErrorDef.h" compile="0" resource="0" file="Source/ErrorDef.h"/>
+        <FILE id="VKfJ1S" name="Lfo.h" compile="0" resource="0" file="Source/Lfo.h"/>
+        <FILE id="FFraJD" name="RingBuffer.h" compile="0" resource="0" file="Source/RingBuffer.h"/>
+        <FILE id="DcPFTG" name="Synthesis.h" compile="0" resource="0" file="Source/Synthesis.h"/>
+        <FILE id="Aur1fF" name="Util.h" compile="0" resource="0" file="Source/Util.h"/>
+        <FILE id="lM6HLV" name="Vibrato.cpp" compile="1" resource="0" file="Source/Vibrato.cpp"/>
+        <FILE id="C1oSZf" name="Vibrato.h" compile="0" resource="0" file="Source/Vibrato.h"/>
+      </GROUP>
       <FILE id="RVGXLf" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="J9M9xy" name="PluginProcessor.h" compile="0" resource="0"

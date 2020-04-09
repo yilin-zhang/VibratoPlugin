@@ -69,8 +69,8 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessor)
 
     CVibrato * vibrato;
-    bool bypassed;
-    float cachedDepthInS;
-    float cachedModFreqInHz;
-    float m_fMaxModulationWidthInSec;
+    bool m_bBypassed;
+    float m_fCachedWidthInS;
+    float m_fCachedFreqInHz;
+    float m_fMaxModWidthInS;
 };
