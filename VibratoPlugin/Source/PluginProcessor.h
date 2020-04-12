@@ -16,7 +16,8 @@
 //==============================================================================
 /**
 */
-class VibratoPluginAudioProcessor  : public AudioProcessor
+class VibratoPluginAudioProcessor  : public AudioProcessor,
+                                     public AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -56,6 +57,8 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //==============================================================================
+    void parameterChanged (const String &parameterID, float newValue) override;
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessor)
@@ -63,8 +66,9 @@ private:
     CVibrato * vibrato;
     float m_fMaxModWidthInS;
 
+    float m_fParamFreqInHz;
+    float m_fParamWidthInMs;
+    float m_fParamBypassed;
     AudioProcessorValueTreeState parameters;
-    std::atomic<float>* m_fParamFreqInHz = nullptr;
-    std::atomic<float>* m_fParamWidthInMs = nullptr;
-    std::atomic<float>* m_fParamBypassed = nullptr;
+
 };
