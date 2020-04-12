@@ -12,40 +12,35 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+VibratoPluginAudioProcessorEditor::VibratoPluginAudioProcessorEditor (VibratoPluginAudioProcessor& p, AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&p),
+      processor (p),
+      sliderModWidth {Slider::RotaryVerticalDrag, Slider::TextBoxBelow },
+      sliderModFreq {Slider::RotaryVerticalDrag, Slider::TextBoxBelow},
+      buttonBypass {"Bypass"},
+      valueTreeState (vts)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
 
     addAndMakeVisible (sliderModWidth);
-    //addAndMakeVisible (labelModWidth);
     addAndMakeVisible (sliderModFreq);
-    //addAndMakeVisible (labelModFreq);
     addAndMakeVisible (buttonBypass);
 
-    // TODO: The following range settings should be changed
-    sliderModWidth.setRange(0.0, 100.0, 0.1);
-    sliderModWidth.setValue(0);
     sliderModWidth.setTextValueSuffix (" ms");
-    labelModWidth.setText("Mod Width", dontSendNotification);
+    labelModWidth.setText("Width", dontSendNotification);
     labelModWidth.attachToComponent(&sliderModWidth, false);
     labelModWidth.setJustificationType(Justification::centred);
+    widthAttachment.reset(new SliderAttachment (valueTreeState, "widthInMs", sliderModWidth));
 
-    sliderModFreq.setRange(0.0, 5.0, 0.001);
-    sliderModFreq.setValue(0);
     sliderModFreq.setTextValueSuffix (" Hz");
-    labelModFreq.setText("Mod Frequency", dontSendNotification);
+    labelModFreq.setText("Frequency", dontSendNotification);
     labelModFreq.attachToComponent(&sliderModFreq, false);
     labelModFreq.setJustificationType(Justification::centred);
+    freqAttachment.reset(new SliderAttachment (valueTreeState, "freqInHz", sliderModFreq));
 
-    sliderModWidth.addListener(this);
-    sliderModFreq.addListener(this);
-    buttonBypass.addListener(this);
-
-    processor.setModWidthInS(getWidthSliderValueInS());
-    processor.setModFreqInHz(getFreqSliderValueInHz());
+    bypassAttachment.reset(new ButtonAttachment (valueTreeState, "bypassed", buttonBypass));
 }
 
 VibratoPluginAudioProcessorEditor::~VibratoPluginAudioProcessorEditor()
@@ -70,29 +65,4 @@ void VibratoPluginAudioProcessorEditor::resized()
     sliderModWidth.setBounds(50, 80, 100, 100);
     sliderModFreq.setBounds(200, 80, 100, 100);
     buttonBypass.setBounds(10, 10, 100, 50);
-}
-
-void VibratoPluginAudioProcessorEditor::sliderValueChanged(Slider *slider)
-{
-    if (slider == &sliderModWidth)
-        processor.setModWidthInS(getWidthSliderValueInS());
-    else if (slider == &sliderModFreq)
-        processor.setModFreqInHz(getFreqSliderValueInHz());
-}
-
-void VibratoPluginAudioProcessorEditor::buttonStateChanged(Button *button)
-{
-}
-
-void VibratoPluginAudioProcessorEditor::buttonClicked(Button *button)
-{
-    processor.toggleBypass();
-}
-
-float VibratoPluginAudioProcessorEditor::getWidthSliderValueInS() {
-    return static_cast<float>(sliderModWidth.getValue()/1000);
-}
-
-float VibratoPluginAudioProcessorEditor::getFreqSliderValueInHz() {
-    return static_cast<float>(sliderModFreq.getValue());
 }

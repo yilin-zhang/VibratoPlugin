@@ -16,12 +16,13 @@
 //==============================================================================
 /**
 */
-class VibratoPluginAudioProcessorEditor  : public AudioProcessorEditor,
-                                           private Slider::Listener,
-                                           private ToggleButton::Listener
+class VibratoPluginAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    VibratoPluginAudioProcessorEditor (VibratoPluginAudioProcessor&);
+    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+
+    VibratoPluginAudioProcessorEditor (VibratoPluginAudioProcessor&, AudioProcessorValueTreeState&);
     ~VibratoPluginAudioProcessorEditor();
 
     //==============================================================================
@@ -32,19 +33,22 @@ public:
     float getFreqSliderValueInHz();
 
 private:
-    void sliderValueChanged (Slider* slider) override;
-    void buttonStateChanged (Button* button) override;
-    void buttonClicked (Button* button) override;
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     VibratoPluginAudioProcessor& processor;
 
-    Slider sliderModWidth {Slider::RotaryVerticalDrag, Slider::TextBoxBelow};
+    Slider sliderModWidth;
     Label labelModWidth;
-    Slider sliderModFreq {Slider::RotaryVerticalDrag, Slider::TextBoxBelow};
+    Slider sliderModFreq;
     Label labelModFreq;
-    ToggleButton buttonBypass {"Bypass"};
+    ToggleButton buttonBypass;
+
+    AudioProcessorValueTreeState& valueTreeState;
+
+    std::unique_ptr<SliderAttachment> widthAttachment;
+    std::unique_ptr<SliderAttachment> freqAttachment;
+    std::unique_ptr<ButtonAttachment> bypassAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessorEditor)
 };

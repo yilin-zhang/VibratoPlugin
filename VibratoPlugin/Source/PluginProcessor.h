@@ -56,21 +56,15 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    //==============================================================================
-
-    bool isBypassed();
-    void toggleBypass();
-    void setModWidthInS(float widthInS);
-    void setModFreqInHz(float freqInHz);
-
-
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessor)
 
     CVibrato * vibrato;
-    bool m_bBypassed;
-    float m_fCachedWidthInS;
-    float m_fCachedFreqInHz;
     float m_fMaxModWidthInS;
+
+    AudioProcessorValueTreeState parameters;
+    std::atomic<float>* m_fParamFreqInHz = nullptr;
+    std::atomic<float>* m_fParamWidthInMs = nullptr;
+    std::atomic<float>* m_fParamBypassed = nullptr;
 };
