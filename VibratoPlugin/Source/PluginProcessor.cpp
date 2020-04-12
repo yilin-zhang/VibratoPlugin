@@ -23,7 +23,7 @@ VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
                      #endif
                     ),
 #endif
-     vibrato(nullptr),
+     m_pVibrato(nullptr),
      m_fMaxModWidthInS(0.1),  // TODO: This needs to be set properly
      m_fParamFreqInHz(0.0f),  // TODO: This needs to be set properly
      m_fParamWidthInMs(0.0f),  // TODO: This needs to be set properly
@@ -35,7 +35,7 @@ VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
                     std::make_unique<AudioParameterBool>("bypassed", "Bypassed", false)
                 })
 {
-    CVibrato::createInstance(vibrato);
+    CVibrato::createInstance(m_pVibrato);
     //m_fParamFreqInHz = parameters.getRawParameterValue ("freqInHz");
     //m_fParamWidthInMs = parameters.getRawParameterValue ("widthInMs");
     //m_fParamBypassed = parameters.getRawParameterValue ("bypassed"); // 0.0f or 1.0f
@@ -47,7 +47,7 @@ VibratoPluginAudioProcessor::VibratoPluginAudioProcessor() :
 
 VibratoPluginAudioProcessor::~VibratoPluginAudioProcessor()
 {
-    CVibrato::destroyInstance(vibrato);
+    CVibrato::destroyInstance(m_pVibrato);
 }
 
 //==============================================================================
@@ -115,7 +115,7 @@ void VibratoPluginAudioProcessor::changeProgramName (int index, const String& ne
 //==============================================================================
 void VibratoPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    vibrato->initInstance(m_fMaxModWidthInS, static_cast<float>(sampleRate), getTotalNumInputChannels());
+    m_pVibrato->initInstance(m_fMaxModWidthInS, static_cast<float>(sampleRate), getTotalNumInputChannels());
 }
 
 void VibratoPluginAudioProcessor::releaseResources()
@@ -171,7 +171,7 @@ void VibratoPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
 
-    vibrato->process(const_cast<float **>(buffer.getArrayOfReadPointers()), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
+    m_pVibrato->process(const_cast<float **>(buffer.getArrayOfReadPointers()), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -222,13 +222,13 @@ void VibratoPluginAudioProcessor::parameterChanged (const String &parameterID, f
 
         bypassed = round(m_fParamBypassed);
         modWidthInS = m_fParamWidthInMs / 1000;
-        vibrato->setParam(CVibrato::kParamModWidthInS, modWidthInS * static_cast<float>(1-bypassed));
+        m_pVibrato->setParam(CVibrato::kParamModWidthInS, modWidthInS * static_cast<float>(1-bypassed));
     }
     else if (parameterID == "freqInHz")
     {
         m_fParamFreqInHz = newValue;
         modFreqInHz = m_fParamFreqInHz;
-        vibrato->setParam(CVibrato::kParamModFreqInHz, modFreqInHz);
+        m_pVibrato->setParam(CVibrato::kParamModFreqInHz, modFreqInHz);
     }
 }
 //==============================================================================

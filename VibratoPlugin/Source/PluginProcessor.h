@@ -63,7 +63,7 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibratoPluginAudioProcessor)
 
-    CVibrato * vibrato;
+    CVibrato * m_pVibrato;
     float m_fMaxModWidthInS;
 
     float m_fParamFreqInHz;
